@@ -1,14 +1,7 @@
-function getCats(req, res) {
-  const cats = [
-    {
-      name: 'foo',
-    },
-    {
-      name: 'bar',
-    },
-  ];
+const models = require('../models');
 
-  res.send(cats);
+function getCats(req, res) {
+  models.Cats.findAll().then(cats => res.send(cats));
 }
 
 module.exports = router => {

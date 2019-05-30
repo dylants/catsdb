@@ -26,8 +26,8 @@ app.use(bodyParser.json());
  * ------------------------------------------ */
 const apiRouter = new express.Router();
 
-const ROUTE_PATH = path.join(__dirname, 'routes');
-glob(`${ROUTE_PATH}/**/*.js`, (err, files) => {
+const ROUTES_PATH = path.join(__dirname, 'routes');
+glob(`${ROUTES_PATH}/**/*.js`, (err, files) => {
   files
     .filter(file => !file.endsWith('.test.js'))
     .forEach(file => require(file)(apiRouter));
