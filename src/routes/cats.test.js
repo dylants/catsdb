@@ -7,6 +7,12 @@ describe('cats routes', () => {
   beforeEach(() => {
     app = express();
 
+    jest.mock('../models', () => ({
+      Cat: {
+        findAll: () => Promise.resolve(['meow']),
+      },
+    }));
+
     const routes = require('./cats');
     routes(app);
   });
@@ -17,14 +23,7 @@ describe('cats routes', () => {
         .get('/cats')
         .expect(200)
         .then(data => {
-          expect(data.body).toEqual([
-            {
-              name: 'foo',
-            },
-            {
-              name: 'bar',
-            },
-          ]);
+          expect(data.body).toEqual(['meow']);
         }));
   });
 });

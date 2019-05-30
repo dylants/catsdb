@@ -1,15 +1,19 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Cats extends Model {}
-  Cats.init(
+  class Cat extends Model {}
+  Cat.init(
     {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
     },
-    { sequelize },
+    {
+      sequelize,
+      createdAt: 'addedAt',
+      updatedAt: 'lastSeenAt',
+    },
   );
-  return Cats;
+  return Cat;
 };

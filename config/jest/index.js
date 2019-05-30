@@ -6,6 +6,7 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/src/index.js',
     '<rootDir>\\/src\\/(lib|middleware)\\/\\w*\\/index\\.js',
+    '<rootDir>/src/models',
     '<rootDir>/node_modules/',
   ],
   coverageReporters: ['text', 'lcov'],
