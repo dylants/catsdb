@@ -4,28 +4,32 @@ const request = require('supertest');
 describe('cats routes', () => {
   let app;
 
-  beforeEach(() => {
+  function setup(mockModels) {
     app = express();
 
-    jest.mock('../models', () => ({
-      Cat: {
-        findAll: () =>
-          Promise.resolve([
-            {
-              breed: 'Yellow',
-              foo: 'bar',
-              imageUrl: 'http://foo.com',
-              name: 'Meow',
-            },
-          ]),
-      },
-    }));
+    jest.mock('../models', () => mockModels);
 
     const routes = require('./cats');
     routes(app);
-  });
+  }
 
   describe('/cats/random route', () => {
+    beforeEach(() => {
+      setup({
+        Cat: {
+          findAll: () =>
+            Promise.resolve([
+              {
+                breed: 'Yellow',
+                foo: 'bar',
+                imageUrl: 'http://foo.com',
+                name: 'Meow',
+              },
+            ]),
+        },
+      });
+    });
+
     it('should return some details about a random cat', () =>
       request(app)
         .get('/cats/random')
