@@ -9,7 +9,15 @@ describe('cats routes', () => {
 
     jest.mock('../models', () => ({
       Cat: {
-        findAll: () => Promise.resolve(['meow']),
+        findAll: () =>
+          Promise.resolve([
+            {
+              breed: 'Yellow',
+              foo: 'bar',
+              imageUrl: 'http://foo.com',
+              name: 'Meow',
+            },
+          ]),
       },
     }));
 
@@ -17,13 +25,17 @@ describe('cats routes', () => {
     routes(app);
   });
 
-  describe('/cats route', () => {
-    it('should return cats', () =>
+  describe('/cats/random route', () => {
+    it('should return some details about a random cat', () =>
       request(app)
-        .get('/cats')
+        .get('/cats/random')
         .expect(200)
         .then(data => {
-          expect(data.body).toEqual(['meow']);
+          expect(data.body).toEqual({
+            breed: 'Yellow',
+            imageUrl: 'http://foo.com',
+            name: 'Meow',
+          });
         }));
   });
 });
