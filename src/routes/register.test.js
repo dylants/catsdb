@@ -3,7 +3,12 @@ const request = require('supertest');
 const bodyParser = require('body-parser');
 const { UniqueConstraintError } = require('sequelize');
 
-describe('cat routes', () => {
+describe('register routes', () => {
+  const VALID_INPUT = {
+    username: 'foo',
+    password: 'barbarbar',
+  };
+
   let app;
 
   function setup(mockModels) {
@@ -14,39 +19,23 @@ describe('cat routes', () => {
     jest.restoreAllMocks();
     jest.mock('../models', () => mockModels);
 
-    const routes = require('./cat');
+    const routes = require('./register');
     routes(app);
   }
 
-  describe('/cat/register route, when create succeeds', () => {
-    const VALID_INPUT = {
-      name: 'foo',
-      username: 'foo',
-      password: 'barbarbar',
-      weight: 2.4,
-    };
-
+  describe('/register route, when create succeeds', () => {
     beforeEach(() => {
       setup({
-        Cat: {
+        User: {
           create: () => Promise.resolve(),
         },
       });
     });
 
-    it('should return 400 without name', () =>
-      request(app)
-        .post('/cat/register')
-        .send({})
-        .expect(400)
-        .then(data => {
-          expect(data.body).toEqual({ error: 'name is required' });
-        }));
-
     it('should return 400 without username', () =>
       request(app)
-        .post('/cat/register')
-        .send({ name: 'foo' })
+        .post('/register')
+        .send({})
         .expect(400)
         .then(data => {
           expect(data.body).toEqual({ error: 'username is required' });
@@ -54,26 +43,17 @@ describe('cat routes', () => {
 
     it('should return 400 without password', () =>
       request(app)
-        .post('/cat/register')
-        .send({ name: 'foo', username: 'foo' })
+        .post('/register')
+        .send({ username: 'foo' })
         .expect(400)
         .then(data => {
           expect(data.body).toEqual({ error: 'password is required' });
         }));
 
-    it('should return 400 without weight', () =>
-      request(app)
-        .post('/cat/register')
-        .send({ name: 'foo', username: 'foo', password: 'bar' })
-        .expect(400)
-        .then(data => {
-          expect(data.body).toEqual({ error: 'weight is required' });
-        }));
-
     it('should return 400 with invalid password', () =>
       request(app)
-        .post('/cat/register')
-        .send({ name: 'foo', username: 'foo', password: 'bar', weight: 2.4 })
+        .post('/register')
+        .send({ username: 'foo', password: 'bar' })
         .expect(400)
         .then(data => {
           expect(data.body).toEqual({
@@ -83,22 +63,15 @@ describe('cat routes', () => {
 
     it('should return 204 with valid data', () =>
       request(app)
-        .post('/cat/register')
+        .post('/register')
         .send(VALID_INPUT)
         .expect(204));
   });
 
-  describe('/cat/register route, when create fails with SequelizeUniqueConstraintError', () => {
-    const VALID_INPUT = {
-      name: 'foo',
-      username: 'foo',
-      password: 'barbarbar',
-      weight: 2.4,
-    };
-
+  describe('/register route, when create fails with SequelizeUniqueConstraintError', () => {
     beforeEach(() => {
       setup({
-        Cat: {
+        User: {
           create: () => Promise.reject(new UniqueConstraintError()),
         },
       });
@@ -106,7 +79,7 @@ describe('cat routes', () => {
 
     it('should return 400', () =>
       request(app)
-        .post('/cat/register')
+        .post('/register')
         .send(VALID_INPUT)
         .expect(400)
         .then(data => {
@@ -116,17 +89,10 @@ describe('cat routes', () => {
         }));
   });
 
-  describe('/cat/register route, when create fails', () => {
-    const VALID_INPUT = {
-      name: 'foo',
-      username: 'foo',
-      password: 'barbarbar',
-      weight: 2.4,
-    };
-
+  describe('/register route, when create fails', () => {
     beforeEach(() => {
       setup({
-        Cat: {
+        User: {
           create: () => Promise.reject(),
         },
       });
@@ -134,7 +100,7 @@ describe('cat routes', () => {
 
     it('should return 500', () =>
       request(app)
-        .post('/cat/register')
+        .post('/register')
         .send(VALID_INPUT)
         .expect(500)
         .then(data => {

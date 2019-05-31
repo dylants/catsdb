@@ -10,5 +10,5 @@ function getRandomCat(req, res) {
 }
 
 module.exports = router => {
-  router.get('/cats/random', getRandomCat);
+  router.get('/random-cat', getRandomCat);
 };

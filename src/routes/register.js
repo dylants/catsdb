@@ -17,10 +17,8 @@ function checkRequired(req, res) {
 function validateInput(req, res) {
   const checkFieldExists = checkRequired(req, res);
 
-  checkFieldExists('name');
   checkFieldExists('username');
   checkFieldExists('password');
-  checkFieldExists('weight');
 
   const { password } = req.body;
 
@@ -36,24 +34,11 @@ function validateInput(req, res) {
 function register(req, res) {
   validateInput(req, res);
 
-  const {
-    birthdate,
-    breed,
-    imageUrl,
-    name,
-    password,
-    username,
-    weight,
-  } = req.body;
+  const { password, username } = req.body;
 
-  return models.Cat.create({
-    birthdate,
-    breed,
-    imageUrl,
-    name,
+  return models.User.create({
     password,
     username,
-    weight,
   })
     .then(() => res.status(204).end())
     .catch(err => {
@@ -74,5 +59,5 @@ function register(req, res) {
 }
 
 module.exports = router => {
-  router.post('/cat/register', register);
+  router.post('/register', register);
 };

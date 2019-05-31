@@ -8,15 +8,10 @@ module.exports = (sequelize, DataTypes) => {
       breed: { type: DataTypes.STRING },
       birthdate: { type: DataTypes.DATEONLY },
       imageUrl: { type: DataTypes.STRING },
-      password: { type: DataTypes.STRING, allowNull: false },
-      username: { type: DataTypes.STRING, allowNull: false },
-      weight: { type: DataTypes.FLOAT },
+      ownedBy: { type: DataTypes.STRING, allowNull: false },
+      weight: { type: DataTypes.FLOAT, allowNull: false },
     },
-    {
-      sequelize,
-      createdAt: 'addedAt',
-      updatedAt: 'lastSeenAt',
-    },
+    { sequelize },
   );
   return Cat;
 };

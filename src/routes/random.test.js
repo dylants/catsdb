@@ -1,7 +1,7 @@
 const express = require('express');
 const request = require('supertest');
 
-describe('cats routes', () => {
+describe('random routes', () => {
   let app;
 
   function setup(mockModels) {
@@ -9,11 +9,11 @@ describe('cats routes', () => {
 
     jest.mock('../models', () => mockModels);
 
-    const routes = require('./cats');
+    const routes = require('./random');
     routes(app);
   }
 
-  describe('/cats/random route', () => {
+  describe('/random-cat route', () => {
     beforeEach(() => {
       setup({
         Cat: {
@@ -32,7 +32,7 @@ describe('cats routes', () => {
 
     it('should return some details about a random cat', () =>
       request(app)
-        .get('/cats/random')
+        .get('/random-cat')
         .expect(200)
         .then(data => {
           expect(data.body).toEqual({
