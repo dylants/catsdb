@@ -1,3 +1,5 @@
+SET SQL_MODE='ALLOW_INVALID_DATES';
+
 DROP DATABASE IF EXISTS `catsdb`;
 CREATE DATABASE `catsdb`;
 
@@ -6,7 +8,7 @@ USE catsdb;
 CREATE TABLE `Users`(
   `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `lastLogin` TIMESTAMP,
+  `lastLogin` TIMESTAMP DEFAULT 0,
   `password` VARCHAR(255) NOT NULL,
   `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `username` VARCHAR(255) NOT NULL UNIQUE,
@@ -20,7 +22,7 @@ INSERT INTO `Users`
   (`id`, `username`, `password`, `lastLogin`)
 VALUES
   (1, 'sally', @password, NOW()),
-  (2, 'john', @password, NULL);
+  (2, 'john', @password, 0);
 
 CREATE TABLE `Cats`(
   `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
