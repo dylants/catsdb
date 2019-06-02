@@ -1,5 +1,6 @@
 const logger = require('../lib/logger');
 const models = require('../models');
+const { hashPassword } = require('../lib/auth');
 const { validateRequiredFields } = require('../lib/validator');
 
 function register(req, res) {
@@ -20,7 +21,8 @@ function register(req, res) {
     });
   }
 
-  return models.User.create({ username, password })
+  return hashPassword(password)
+    .then(hashedPassword => models.User.create({ username, hashedPassword }))
     .then(() => res.status(204).end())
     .catch(err => {
       logger.error({ err });

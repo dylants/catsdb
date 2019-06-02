@@ -13,11 +13,14 @@ CREATE TABLE `Users`(
   PRIMARY KEY (id)
 );
 
+-- "password" bcrypt hash with 1 salt round
+SET @password = '$2b$04$4J/Dhe042U1xNFBi1/OHrO/js8O0HXOzCQnJ8RSsdlmj/NqLy8cTS';
+
 INSERT INTO `Users`
   (`id`, `username`, `password`, `lastLogin`)
 VALUES
-  (1, 'sally', 'spiffy123', NOW()),
-  (2, 'john', 'password', NULL);
+  (1, 'sally', @password, NOW()),
+  (2, 'john', @password, NULL);
 
 CREATE TABLE `Cats`(
   `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
