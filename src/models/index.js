@@ -4,9 +4,13 @@ const glob = require('glob');
 const path = require('path');
 const Sequelize = require('sequelize');
 
+const config = require('../../config');
+
 const db = {};
 
-const sequelize = new Sequelize('catsdb', 'root', 'password', {
+const { name, username, password } = config.database;
+
+const sequelize = new Sequelize(name, username, password, {
   dialect: 'mysql',
 });
 

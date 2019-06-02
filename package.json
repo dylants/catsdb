@@ -12,6 +12,7 @@
     "clean": "yarn clean:coverage && yarn clean:node_modules",
     "db:seed": "mysql -u root -p < db/init.sql",
     "lint": "eslint .",
+    "production": "node src/index.js",
     "start": "NODE_ENV=development nodemon src/index.js --config 'config/nodemon.json'",
     "test:jest": "NODE_ENV=test jest --config config/jest/index.js",
     "test:watch": "yarn test:jest --watch",

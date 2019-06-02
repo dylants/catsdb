@@ -9,6 +9,11 @@ module.exports = {
     saltRounds: 1,
     secretKey: 'secret',
   },
+  database: {
+    name: 'catsdb',
+    username: process.env.DATABASE_USERNAME || 'root',
+    password: process.env.DATABASE_PASSWORD || 'password',
+  },
   logLevel: LOG_LEVEL, // [error, warn, info, verbose, debug, silly]
   port: PORT,
 };
