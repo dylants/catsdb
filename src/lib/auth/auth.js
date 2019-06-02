@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 
 const config = require('../../../config');
 
-// increase this to increase security, but take a hit on performance
 const SALT_ROUNDS = config.auth.saltRounds;
 const KEY = config.auth.secretKey;
 

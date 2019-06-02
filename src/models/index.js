@@ -8,9 +8,10 @@ const config = require('../../config');
 
 const db = {};
 
-const { name, username, password } = config.database;
+const { name, hostname, username, password } = config.database;
 
 const sequelize = new Sequelize(name, username, password, {
+  host: hostname,
   dialect: 'mysql',
 });
 

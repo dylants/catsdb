@@ -1,14 +1,12 @@
 # catsdb
 
-Example app that involves a cat registry.
-
-Cause, coding exercises.
+Register to create cats.
 
 ## Overview
 
-This application consists of a MySQL database which hosts two things: `User`s and `Cat`s. There is then a set of APIs which allow you to create and query the database in a specific way. Below is a description of the APIs available.
+This application consists of a MySQL database which hosts two things: `User`s and `Cat`s. There are a set of APIs which allow you to create and query the database in a specific way. Below is a description of the APIs available.
 
-The following APIs are unsecure:
+The following APIs are unsecure (requires no auth):
 
 - `/register` : POST request, accepts `username` and `password` in the body of the request, and creates a `User` in the database.
 - `/login` : POST request, accepts `username` and `password` in the body of the request, and returns an `authToken`.
@@ -29,17 +27,37 @@ Install the dependencies:
 $ yarn
 ```
 
-_Optional:_ This app requires a running instance of mysql. To setup and seed the database, run the following command (which assumes username `root` and prompts for the password):
+This app requires a running instance of mysql. To setup and seed the database, a sql script has been provided. This script will recreate the `catsdb` database, create the `Users` and `Cats` tables, and seed some data in those tables. To run the script:
 
 ```
-$ yarn db:seed
+$ mysql -h <hostname> -u <mysql_user> -p < db/init.sql
 ```
 
-To start the application, run the following command:
+Where `hostname` is the hostname of the mysql instance, and `mysql_user` is the mysql username to be used by the script. The script will then prompt for the password, and on validation, setup the database.
+
+### Development
+
+To start the application in development mode, run the following command:
 
 ```
 $ yarn start
 ```
+
+### Production
+
+For production, run the following command:
+
+```
+$ DATABASE_HOSTNAME=<hostname> DATABASE_USERNAME=<username> DATABASE_PASSWORD=<password> yarn production
+```
+
+Where `hostname` is the hostname of the mysql server, `username` is the username of the mysql user, and `password` is the password of the mysql user.
+
+The application will be accessible on port 3000 (by default).
+
+## Configuration
+
+Configuration for the application is available within the `config/index.js` file.
 
 ## Tests
 

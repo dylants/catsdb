@@ -6,11 +6,13 @@ const LOG_LEVEL = isDevelopment ? 'debug' : 'verbose';
 
 module.exports = {
   auth: {
+    // increase this to increase security, but take a hit on performance
     saltRounds: 1,
     secretKey: 'secret',
   },
   database: {
     name: 'catsdb',
+    hostname: process.env.DATABASE_HOSTNAME || 'localhost',
     username: process.env.DATABASE_USERNAME || 'root',
     password: process.env.DATABASE_PASSWORD || 'password',
   },
