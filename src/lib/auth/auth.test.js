@@ -22,4 +22,15 @@ describe('auth', () => {
           expect(valid).toEqual(false);
         }));
   });
+
+  describe('token management', () => {
+    it('should be able to generate/verify token', () => {
+      const token = auth.generateToken('foo');
+      expect(auth.verifyToken(token)).toEqual(true);
+    });
+
+    it('should be able to confirm invalid token', () => {
+      expect(auth.verifyToken('foo')).toEqual(false);
+    });
+  });
 });

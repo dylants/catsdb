@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 describe('login routes', () => {
   let app;
 
-  function setup(mockModels, mockValidatePassword) {
+  function setup(mockModels, mockValidatePassword, mockGenerateToken) {
     app = express();
     app.use(bodyParser.json());
 
@@ -13,6 +13,7 @@ describe('login routes', () => {
     jest.restoreAllMocks();
     jest.mock('../models', () => mockModels);
     jest.mock('../lib/auth', () => ({
+      generateToken: mockGenerateToken,
       validatePassword: mockValidatePassword,
     }));
 
@@ -62,6 +63,7 @@ describe('login routes', () => {
             },
           },
           () => true,
+          () => 'abc',
         );
       });
 
@@ -69,7 +71,12 @@ describe('login routes', () => {
         request(app)
           .post('/login')
           .send(VALID_INPUT)
-          .expect(201));
+          .expect(201)
+          .then(data => {
+            expect(data.body).toEqual({
+              token: 'abc',
+            });
+          }));
     });
 
     describe('when user can not be found', () => {

@@ -1,7 +1,11 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const config = require('../../../config');
 
 // increase this to increase security, but take a hit on performance
-const SALT_ROUNDS = 1;
+const SALT_ROUNDS = config.auth.saltRounds;
+const KEY = config.auth.secretKey;
 
 exports.hashPassword = async password => {
   return bcrypt.hash(password, SALT_ROUNDS);
@@ -9,4 +13,18 @@ exports.hashPassword = async password => {
 
 exports.validatePassword = async (password, hash) => {
   return bcrypt.compare(password, hash);
+};
+
+exports.generateToken = username => {
+  return jwt.sign({ username }, KEY);
+};
+
+exports.verifyToken = token => {
+  try {
+    jwt.verify(token, KEY);
+  } catch (err) {
+    return false;
+  }
+
+  return true;
 };
