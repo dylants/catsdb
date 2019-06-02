@@ -11,7 +11,7 @@ describe('cats routes', () => {
 
     jest.resetModules();
     jest.restoreAllMocks();
-    jest.mock('../models', () => mockModels);
+    jest.mock('../../models', () => mockModels);
 
     const routes = require('./cats');
     routes(app);

@@ -1,7 +1,7 @@
-const logger = require('../lib/logger');
-const models = require('../models');
-const { hashPassword } = require('../lib/auth');
-const { validateRequiredFields } = require('../lib/validator');
+const logger = require('../../lib/logger');
+const models = require('../../models');
+const { hashPassword } = require('../../lib/auth');
+const { validateRequiredFields } = require('../../lib/validator');
 
 function register(req, res) {
   const requiredFieldError = validateRequiredFields(req.body, [
@@ -22,7 +22,9 @@ function register(req, res) {
   }
 
   return hashPassword(password)
-    .then(hashedPassword => models.User.create({ username, hashedPassword }))
+    .then(hashedPassword =>
+      models.User.create({ username, password: hashedPassword }),
+    )
     .then(() => res.status(204).end())
     .catch(err => {
       logger.error({ err });

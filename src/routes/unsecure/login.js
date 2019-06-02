@@ -1,8 +1,10 @@
-const logger = require('../lib/logger');
-const models = require('../models');
-const UnauthorizedError = require('../errors/UnauthorizedError');
-const { generateToken, validatePassword } = require('../lib/auth');
-const { validateRequiredFields } = require('../lib/validator');
+const sequelize = require('sequelize');
+
+const logger = require('../../lib/logger');
+const models = require('../../models');
+const UnauthorizedError = require('../../errors/UnauthorizedError');
+const { generateToken, validatePassword } = require('../../lib/auth');
+const { validateRequiredFields } = require('../../lib/validator');
 
 const LOGIN_FAILED_ERROR = 'username or password is invalid';
 
@@ -33,9 +35,12 @@ async function login(req, res) {
         throw new UnauthorizedError();
       }
 
-      const token = generateToken(user.username);
+      // don't need to wait for this, but update lastLogin
+      user.update({ lastLogin: sequelize.literal('CURRENT_TIMESTAMP') });
 
-      return res.status(201).send({ token });
+      const authToken = generateToken(username);
+
+      return res.status(201).send({ authToken });
     })
     .catch(err => {
       logger.error({ err });

@@ -7,7 +7,7 @@ describe('random routes', () => {
   function setup(mockModels) {
     app = express();
 
-    jest.mock('../models', () => mockModels);
+    jest.mock('../../models', () => mockModels);
 
     const routes = require('./random');
     routes(app);

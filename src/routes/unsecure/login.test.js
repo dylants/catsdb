@@ -11,8 +11,8 @@ describe('login routes', () => {
 
     jest.resetModules();
     jest.restoreAllMocks();
-    jest.mock('../models', () => mockModels);
-    jest.mock('../lib/auth', () => ({
+    jest.mock('../../models', () => mockModels);
+    jest.mock('../../lib/auth', () => ({
       generateToken: mockGenerateToken,
       validatePassword: mockValidatePassword,
     }));
@@ -56,9 +56,8 @@ describe('login routes', () => {
             User: {
               findOne: () =>
                 Promise.resolve({
-                  user: {
-                    password: 'foo',
-                  },
+                  password: 'foo',
+                  update: () => {},
                 }),
             },
           },
@@ -74,7 +73,7 @@ describe('login routes', () => {
           .expect(201)
           .then(data => {
             expect(data.body).toEqual({
-              token: 'abc',
+              authToken: 'abc',
             });
           }));
     });
@@ -110,9 +109,7 @@ describe('login routes', () => {
             User: {
               findOne: () =>
                 Promise.resolve({
-                  user: {
-                    password: 'foo',
-                  },
+                  password: 'foo',
                 }),
             },
           },

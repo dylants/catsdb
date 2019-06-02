@@ -1,8 +1,8 @@
 const _ = require('lodash');
 
-const logger = require('../lib/logger');
-const models = require('../models');
-const { validateRequiredFields } = require('../lib/validator');
+const logger = require('../../lib/logger');
+const models = require('../../models');
+const { validateRequiredFields } = require('../../lib/validator');
 
 function filterBy(query) {
   // grab the possible query attributes, that are defined/non-null
