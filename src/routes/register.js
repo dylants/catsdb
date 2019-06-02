@@ -1,45 +1,26 @@
 const logger = require('../lib/logger');
 const models = require('../models');
+const { validateRequiredFields } = require('../lib/validator');
 
-function checkRequired(req, res) {
-  return field => {
-    if (!req.body[field]) {
-      return res.status(400).send({
-        error: `${field} is required`,
-      });
-    }
-    return null;
-  };
-}
+function register(req, res) {
+  const requiredFieldError = validateRequiredFields(req.body, [
+    'username',
+    'password',
+  ]);
+  if (requiredFieldError) {
+    return res.status(400).send({
+      error: requiredFieldError,
+    });
+  }
 
-// TODO This function does it's job, but could probably
-// be refactored to improve the logic flow
-function validateInput(req, res) {
-  const checkFieldExists = checkRequired(req, res);
-
-  checkFieldExists('username');
-  checkFieldExists('password');
-
-  const { password } = req.body;
-
+  const { password, username } = req.body;
   if (!password.length || password.length < 8) {
     return res.status(400).send({
       error: 'password must be 8 characters or more',
     });
   }
 
-  return null;
-}
-
-function register(req, res) {
-  validateInput(req, res);
-
-  const { password, username } = req.body;
-
-  return models.User.create({
-    password,
-    username,
-  })
+  return models.User.create({ username, password })
     .then(() => res.status(204).end())
     .catch(err => {
       logger.error({ err });

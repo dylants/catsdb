@@ -32,34 +32,22 @@ describe('register routes', () => {
       });
     });
 
-    it('should return 400 without username', () =>
+    it.each`
+      test                          | body                                    | error
+      ${'without a username'}       | ${{}}                                   | ${'username is required'}
+      ${'without a password'}       | ${{ username: 'foo' }}                  | ${'password is required'}
+      ${'with an invalid password'} | ${{ username: 'foo', password: 'bar' }} | ${'password must be 8 characters or more'}
+    `('should return 400 $test', ({ body, error }) =>
       request(app)
         .post('/register')
-        .send({})
-        .expect(400)
-        .then(data => {
-          expect(data.body).toEqual({ error: 'username is required' });
-        }));
-
-    it('should return 400 without password', () =>
-      request(app)
-        .post('/register')
-        .send({ username: 'foo' })
-        .expect(400)
-        .then(data => {
-          expect(data.body).toEqual({ error: 'password is required' });
-        }));
-
-    it('should return 400 with invalid password', () =>
-      request(app)
-        .post('/register')
-        .send({ username: 'foo', password: 'bar' })
+        .send(body)
         .expect(400)
         .then(data => {
           expect(data.body).toEqual({
-            error: 'password must be 8 characters or more',
+            error,
           });
-        }));
+        }),
+    );
 
     it('should return 204 with valid data', () =>
       request(app)
